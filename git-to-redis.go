@@ -20,7 +20,6 @@ func convert() {
 	}
 	fmt.Printf("%s\n", output)
 
-
 	lines := bytes.Split(output, []byte("\n"))
 	fmt.Printf("\noutput byte length: %v; number of lines: %v\n\n", len(output), len(lines))
 
@@ -30,6 +29,6 @@ func convert() {
 			fmt.Printf("new commit at line %v: %s\n", i, s)
 		}
 	}
-	
+
 	return
 }
