@@ -4,7 +4,12 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+
+	//"github.com/go-redis/redis"
+	"github.com/mediocregopher/radix.v2/redis"
 )
+
+var rClient, _ = redis.Dial("tcp", "localhost:6379")
 
 func convert() {
 	cmd := exec.Command("/usr/bin/git",
@@ -67,4 +72,13 @@ func handleEntry(comm []byte, spon []byte, path [][]byte) {
 	}
 	spon = bytes.TrimSpace(spon)
 	fmt.Printf("s: {%s}\n", spon)
+
+	resp := rClient.Cmd("HSET",
+		fmt.Sprintf("commit:%s", comm),
+		"sponsored", fmt.Sprintf("%s", spon),
+		"path", fmt.Sprintf("%s", path),
+	)
+	if resp != nil {
+		fmt.Println(resp)
+	}
 }
