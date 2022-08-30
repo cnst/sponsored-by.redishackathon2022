@@ -32,7 +32,8 @@ func convert() {
 		if bytes.HasPrefix(s, []byte("commit ")) {
 			fmt.Printf("new commit at line %v: %s\n", i, s)
 			nc := bytes.Split(s, []byte(" "))
-			fmt.Printf("\n old:%s\n%s\n{%s}\n, new:%s\n", comm, spon, path, nc[1])
+			//fmt.Printf("\n old:%s\n%s\n{%s}\n, new:%s\n", comm, spon, path, nc[1])
+			handleEntry(comm, spon, path)
 			comm = nc[1]
 			spon = nil
 			path = nil
@@ -46,12 +47,24 @@ func convert() {
 			continue
 		} else if len(s) > 0 {
 			path = append(path, s)
-			for _, ss := range path {
-				fmt.Printf("%s\n", ss)
-			}
-			fmt.Println("")
+			//for _, ss := range path {
+			//	fmt.Printf("%s\n", ss)
+			//}
+			//fmt.Println("")
 		}
 	}
+	handleEntry(comm, spon, path)
 
 	return
+}
+
+func handleEntry(comm []byte, spon []byte, path [][]byte) {
+
+	fmt.Printf("\n\n\n new entry: %s\n%s\n[%v]{%s}\n\n", comm, spon, len(path), path)
+	s := bytes.Split(spon, []byte(":"))
+	if len(s) >= 2 {
+		spon = s[1]
+	}
+	spon = bytes.TrimSpace(spon)
+	fmt.Printf("s: {%s}\n", spon)
 }
